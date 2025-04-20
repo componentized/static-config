@@ -1,0 +1,6 @@
+*.wasm
+static-config*
+
+# small artifacts that are part of the rust crate should be committed
+!adapter.wasm
+!package.wasm
