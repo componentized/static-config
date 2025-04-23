@@ -56,8 +56,6 @@ jobs:
         target: ${{ matrix.target }}
     - name: Install cargo binstall
       uses: cargo-bins/cargo-binstall@main
-    - name: Install cross
-      run: cargo binstall --force cross
     - name: Download artifacts.tar
       uses: actions/download-artifact@v4
       with:
