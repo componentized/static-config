@@ -40,6 +40,8 @@ The Componentized project team welcomes contributions from the community. A cont
 
 This project was conceived in discussion between [Mark Fisher](https://github.com/markfisher) and [Scott Andrews](https://github.com/scothis).
 
+The core of this project is a stripped down fork of [WASI Virt](https://github.com/bytecodealliance/WASI-Virt).
+
 ## License
 
 Apache License v2.0: see [LICENSE](./LICENSE) for details.
