@@ -21,3 +21,4 @@ cp "${SCRIPT_DIR}/target/wasm32-unknown-unknown/release/factory.wasm" "${SCRIPT_
 
 cargo build --release
 
+cargo test
