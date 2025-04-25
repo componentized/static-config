@@ -34,7 +34,7 @@ java-properties = "2.0.0"
 serde = { version = "1", features = ["derive"] }
 walrus = "0.23.3"
 wasm-compose = "0.229.0"
-wasm-metadata = "0.225.0"
+wasm-metadata = "0.229.0"
 wit-component = "0.229.0"
 
 [dev-dependencies]
