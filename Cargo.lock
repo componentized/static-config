@@ -1762,9 +1762,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-compose"
-version = "0.225.0"
+version = "0.229.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4be44e624fed3cbb5a5525cb55092c79fc9e88e4252e620b93a5cd99a475a793"
+checksum = "54b2e985adc26dec5d6b9d40bf95923fbabb5bc5244582430016f88a129ebf48"
 dependencies = [
  "anyhow",
  "heck 0.4.1",
@@ -1776,8 +1776,8 @@ dependencies = [
  "serde_derive",
  "serde_yaml",
  "smallvec",
- "wasm-encoder 0.225.0",
- "wasmparser 0.225.0",
+ "wasm-encoder 0.229.0",
+ "wasmparser 0.229.0",
  "wat",
 ]
 
