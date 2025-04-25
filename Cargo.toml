@@ -37,6 +37,9 @@ wasm-compose = "0.225.0"
 wasm-metadata = "0.225.0"
 wit-component = "0.225.0"
 
+[dev-dependencies]
+wasmtime = "32"
+
 [workspace.dependencies]
 anyhow = "1"
 static-config = { path = "." }
