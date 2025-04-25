@@ -12,5 +12,5 @@ debug = []
 
 [dependencies]
 anyhow = { workspace = true }
-bytes = "1.10.0"
+bytes = "1.10.1"
 wit-bindgen = { workspace = true }
