@@ -1542,7 +1542,7 @@ dependencies = [
  "wasm-compose",
  "wasm-metadata 0.229.0",
  "wasmtime",
- "wit-component 0.229.0",
+ "wit-component 0.230.0",
 ]
 
 [[package]]
@@ -1910,6 +1910,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "wasm-metadata"
+version = "0.230.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1a52e010df5494f4289ccc68ce0c2a8c17555225a5e55cc41b98f5ea28d0844b"
+dependencies = [
+ "anyhow",
+ "indexmap 2.7.1",
+ "wasm-encoder 0.230.0",
+ "wasmparser 0.230.0",
+]
+
+[[package]]
 name = "wasmparser"
 version = "0.214.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1967,6 +1979,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "808198a69b5a0535583370a51d459baa14261dfab04800c4864ee9e1a14346ed"
 dependencies = [
  "bitflags",
+ "hashbrown 0.15.2",
  "indexmap 2.7.1",
  "semver",
 ]
@@ -2482,9 +2495,9 @@ dependencies = [
 
 [[package]]
 name = "wit-component"
-version = "0.229.0"
+version = "0.230.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7f550067740e223bfe6c4878998e81cdbe2529dd9a793dc49248dd6613394e8b"
+checksum = "b607b15ead6d0e87f5d1613b4f18c04d4e80ceeada5ffa608d8360e6909881df"
 dependencies = [
  "anyhow",
  "bitflags",
@@ -2493,10 +2506,10 @@ dependencies = [
  "serde",
  "serde_derive",
  "serde_json",
- "wasm-encoder 0.229.0",
- "wasm-metadata 0.229.0",
- "wasmparser 0.229.0",
- "wit-parser 0.229.0",
+ "wasm-encoder 0.230.0",
+ "wasm-metadata 0.230.0",
+ "wasmparser 0.230.0",
+ "wit-parser 0.230.0",
 ]
 
 [[package]]
@@ -2537,9 +2550,9 @@ dependencies = [
 
 [[package]]
 name = "wit-parser"
-version = "0.229.0"
+version = "0.230.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "459c6ba62bf511d6b5f2a845a2a736822e38059c1cfa0b644b467bbbfae4efa6"
+checksum = "679fde5556495f98079a8e6b9ef8c887f731addaffa3d48194075c1dd5cd611b"
 dependencies = [
  "anyhow",
  "id-arena",
@@ -2550,7 +2563,7 @@ dependencies = [
  "serde_derive",
  "serde_json",
  "unicode-xid",
- "wasmparser 0.229.0",
+ "wasmparser 0.230.0",
 ]
 
 [[package]]
