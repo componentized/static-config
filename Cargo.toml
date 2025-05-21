@@ -38,7 +38,7 @@ wasm-metadata = "0.230.0"
 wit-component = "0.230.0"
 
 [dev-dependencies]
-wasmtime = "32"
+wasmtime = "33"
 
 [workspace.dependencies]
 anyhow = "1"
