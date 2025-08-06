@@ -57,7 +57,7 @@ jobs:
     - name: Install cargo binstall
       uses: cargo-bins/cargo-binstall@main
     - name: Download artifacts.tar
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         name: artifacts.tar
     - name: Extract artifacts
@@ -92,13 +92,13 @@ jobs:
       id: get_version
       run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
     - name: Download artifacts.tar
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         name: artifacts.tar
     - name: Extract artifacts
       run: tar -xvf artifacts.tar -C lib
     - name: Download CLIs
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         pattern: static-config-*
         path: ./lib/
