@@ -29,7 +29,7 @@ members = [
 
 [dependencies]
 anyhow = { workspace = true }
-clap = { version = "4.5.43", features = ["derive"] }
+clap = { version = "4.5.44", features = ["derive"] }
 java-properties = "2.0.0"
 serde = { version = "1", features = ["derive"] }
 walrus = "0.23.3"
