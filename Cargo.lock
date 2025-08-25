@@ -1538,9 +1538,9 @@ dependencies = [
  "serde",
  "walrus",
  "wasm-compose",
- "wasm-metadata 0.236.1",
+ "wasm-metadata 0.237.0",
  "wasmtime",
- "wit-component 0.237.0",
+ "wit-component 0.236.1",
 ]
 
 [[package]]
@@ -1895,14 +1895,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c909f94a49a8de3365f3c0344f064818f1e369ff1740c5b04f455f85d454768e"
 dependencies = [
  "anyhow",
- "auditable-serde",
- "flate2",
  "indexmap 2.7.1",
- "serde",
- "serde_derive",
- "serde_json",
- "spdx",
- "url",
  "wasm-encoder 0.236.1",
  "wasmparser 0.236.1",
 ]
@@ -1914,7 +1907,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4cc0b0a0c4f35ca6efa7a797671372915d4e9659dba2d59edc6fafc931d19997"
 dependencies = [
  "anyhow",
+ "auditable-serde",
+ "flate2",
  "indexmap 2.7.1",
+ "serde",
+ "serde_derive",
+ "serde_json",
+ "spdx",
+ "url",
  "wasm-encoder 0.237.0",
  "wasmparser 0.237.0",
 ]
@@ -2509,9 +2509,9 @@ dependencies = [
 
 [[package]]
 name = "wit-component"
-version = "0.237.0"
+version = "0.236.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bfb7674f76c10e82fe00b256a9d4ffb2b8d037d42ab8e9a83ebb3be35c9d0bf6"
+checksum = "3622959ed7ed6341c38e5aa35af243632534b0a36226852faa802939ce11e00f"
 dependencies = [
  "anyhow",
  "bitflags",
@@ -2520,10 +2520,10 @@ dependencies = [
  "serde",
  "serde_derive",
  "serde_json",
- "wasm-encoder 0.237.0",
- "wasm-metadata 0.237.0",
- "wasmparser 0.237.0",
- "wit-parser 0.237.0",
+ "wasm-encoder 0.236.1",
+ "wasm-metadata 0.236.1",
+ "wasmparser 0.236.1",
+ "wit-parser 0.236.1",
 ]
 
 [[package]]
@@ -2564,9 +2564,9 @@ dependencies = [
 
 [[package]]
 name = "wit-parser"
-version = "0.237.0"
+version = "0.236.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ce2596a5bc7c24cc965b56ad6ff9e32394c4e401764f89620a888519c6e849ab"
+checksum = "16e4833a20cd6e85d6abfea0e63a399472d6f88c6262957c17f546879a80ba15"
 dependencies = [
  "anyhow",
  "id-arena",
@@ -2577,7 +2577,7 @@ dependencies = [
  "serde_derive",
  "serde_json",
  "unicode-xid",
- "wasmparser 0.237.0",
+ "wasmparser 0.236.1",
 ]
 
 [[package]]
