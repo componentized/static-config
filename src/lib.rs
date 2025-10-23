@@ -59,7 +59,7 @@ pub fn create_component(values: Vec<(String, String)>) -> Result<Vec<u8>> {
         }
     };
 
-    let world = resolve.select_world(pkg_id, Some("adapter"))?;
+    let world = resolve.select_world(&[pkg_id], Some("adapter"))?;
 
     let mut producers = Producers::default();
     producers.add("processed-by", "static-config", env!("CARGO_PKG_VERSION"));
