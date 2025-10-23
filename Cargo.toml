@@ -32,15 +32,15 @@ anyhow = { workspace = true }
 clap = { version = "4.5.45", features = ["derive"] }
 java-properties = "2.0.0"
 serde = { version = "1", features = ["derive"] }
-walrus = "0.23.3"
-wasm-compose = "0.236.0"
-wasm-metadata = "0.236.0"
-wit-component = "0.236.0"
+walrus = "0.24.1"
+wasm-compose = "0.240.0"
+wasm-metadata = "0.240.0"
+wit-component = "0.240.0"
 
 [dev-dependencies]
-wasmtime = "35"
+wasmtime = "36"
 
 [workspace.dependencies]
 anyhow = "1"
 static-config = { path = "." }
-wit-bindgen = "0.39.0"
+wit-bindgen = "0.46.0"
