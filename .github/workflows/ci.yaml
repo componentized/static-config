@@ -26,7 +26,7 @@ jobs:
       run: tar -cvf ../artifacts.tar *
       working-directory: ./lib
     - name: Upload artifacts.tar
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: artifacts.tar
         path: artifacts.tar
@@ -67,7 +67,7 @@ jobs:
         cargo build --release --target ${{ matrix.target }}
         mv target/${{ matrix.target }}/release/static-config lib/static-config-${{ matrix.target }}
     - name: Upload CLI
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: static-config-${{ matrix.target }}
         path: lib/static-config-${{ matrix.target }}
