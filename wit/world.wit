@@ -1,7 +1,7 @@
 package componentized:config;
 
 world adapter {
-    export wasi:config/store@0.2.0-draft;
+    export wasi:config/store@0.2.0-rc.1;
 }
 
 world config-factory {
