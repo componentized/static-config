@@ -43,4 +43,4 @@ wasmtime = "36"
 [workspace.dependencies]
 anyhow = "1"
 static-config = { path = "." }
-wit-bindgen = "0.46.0"
+wit-bindgen = "0.52.0"
