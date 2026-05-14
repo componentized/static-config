@@ -16,6 +16,9 @@ include = [
     "LICENSE"
 ]
 
+[profile.release]
+panic = 'abort'
+
 [[bin]]
 name = "static-config"
 path = "src/bin/main.rs"
@@ -29,18 +32,18 @@ members = [
 
 [dependencies]
 anyhow = { workspace = true }
-clap = { version = "4.5.45", features = ["derive"] }
-java-properties = "2.0.0"
-serde = { version = "1", features = ["derive"] }
-walrus = "0.24.1"
-wasm-compose = "0.240.0"
-wasm-metadata = "0.240.0"
-wit-component = "0.240.0"
+clap = { version = "4.6", features = ["derive"] }
+java-properties = "2.0"
+serde = { version = "1.0", features = ["derive"] }
+walrus = "0.26"
+wasm-compose = "0.248"
+wasm-metadata = "0.248"
+wit-component = "0.248"
 
 [dev-dependencies]
-wasmtime = "36"
+wasmtime = "44"
 
 [workspace.dependencies]
 anyhow = "1"
 static-config = { path = "." }
-wit-bindgen = "0.52.0"
+wit-bindgen = "0.57"
