@@ -36,9 +36,9 @@ clap = { version = "4.6", features = ["derive"] }
 java-properties = "2.0"
 serde = { version = "1.0", features = ["derive"] }
 walrus = "0.26"
-wasm-compose = "0.248"
-wasm-metadata = "0.248"
-wit-component = "0.248"
+wasm-compose = "0.249"
+wasm-metadata = "0.249"
+wit-component = "0.249"
 
 [dev-dependencies]
 wasmtime = "44"

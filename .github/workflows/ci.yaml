@@ -31,6 +31,8 @@ jobs:
         name: artifacts.tar
         path: artifacts.tar
         retention-days: 7
+    - name: Disallow generated drift
+      run: git diff --exit-code . ':!lib/'
 
   build-cli:
     if: startsWith(github.ref, 'refs/tags/')
