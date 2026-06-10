@@ -17,14 +17,21 @@ publish_oci() {
     local file="${1}"
     local component=$(basename "${file}" .wasm)
 
-    wkg oci push \
+    digest=$(
+      wkg oci push \
         --annotation "org.opencontainers.image.title=${component}" \
         --annotation "org.opencontainers.image.version=${version}" \
         --annotation "org.opencontainers.image.source=https://github.com/componentized/static-config.git" \
         --annotation "org.opencontainers.image.revision=${revision}" \
         --annotation "org.opencontainers.image.licenses=Apache-2.0" \
         "${repository}/${component}:${tag}" \
-        "${file}"
+        "${file}" \
+        2>&1 \
+			| tee /dev/stderr \
+			| grep -o 'sha256:[a-f0-9]\{64\}' \
+    )
+
+    cosign sign --yes "${repository}/${component}:${tag}@${digest}"
 }
 
 publish_oci "${SCRIPT_DIR}/lib/factory.wasm"
