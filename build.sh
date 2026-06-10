@@ -13,10 +13,10 @@ mkdir -p "${SCRIPT_DIR}/lib"
 wasm-tools component wit --wasm "${SCRIPT_DIR}/wit" -o "${SCRIPT_DIR}/lib/package.wasm"
 
 cargo build -p adapter --target wasm32-unknown-unknown --release
-cp "${SCRIPT_DIR}/target/wasm32-unknown-unknown/release/adapter.wasm" "${SCRIPT_DIR}/lib"
+cp "${SCRIPT_DIR}/target/wasm32-unknown-unknown/release/adapter.wasm" "${SCRIPT_DIR}/lib/adapter.wasm"
 
-cargo component build -p factory --target wasm32-unknown-unknown --release
-cp "${SCRIPT_DIR}/target/wasm32-unknown-unknown/release/factory.wasm" "${SCRIPT_DIR}/lib"
+cargo build -p factory --target wasm32-unknown-unknown --release
+wasm-tools component new "${SCRIPT_DIR}/target/wasm32-unknown-unknown/release/factory.wasm" -o "${SCRIPT_DIR}/lib/factory.wasm"
 
 cargo build --release
 

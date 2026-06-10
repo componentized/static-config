@@ -14,8 +14,8 @@ Create custom wasi:config components with static values.
 ## Build
 
 Prereqs:
-- a rust toolchain with a recent nightly (`rustup toolchain install nightly`)
-- [`cargo component`](https://github.com/bytecodealliance/cargo-component)
+- a rust toolchain
+- [`wasm-tools`](https://github.com/bytecodealliance/wasm-tools)
 - [`wkg`](https://github.com/bytecodealliance/wasm-pkg-tools)
 
 ```sh
