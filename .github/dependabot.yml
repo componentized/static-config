@@ -4,20 +4,21 @@ updates:
   directory: "/"
   schedule:
     interval: daily
-  open-pull-requests-limit: 10
 - package-ecosystem: rust-toolchain
   directory: "/"
   schedule:
     interval: daily
-  open-pull-requests-limit: 10
 - package-ecosystem: cargo
   directory: "/"
   schedule:
     interval: daily
-  open-pull-requests-limit: 10
   groups:
     wasm-tools:
       patterns:
       - wasm-compose
       - wasm-metadata
       - wit-component
+- package-ecosystem: devcontainers
+  directory: "/"
+  schedule:
+    interval: weekly
