@@ -7,7 +7,7 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 repository="${1}"
 version="${2}"
 # replace forbidden characters for the tag
-tag=$(echo "${version}" | sed 's/[^a-zA-Z0-9_.\-]/--/g')
+tag=$(echo "${version#v}" | tr '+' '_')
 revision=$(git rev-parse HEAD)
 if [[ $(git status --porcelain) ]] ; then
   revision="${revision}+dirty"
