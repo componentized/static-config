@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7
-    - uses: actions-rust-lang/setup-rust-toolchain@v1
+    - uses: actions-rust-lang/setup-rust-toolchain@v2
     - name: Install cargo binstall
       uses: cargo-bins/cargo-binstall@main
     - name: Install wasm-tools
@@ -52,7 +52,7 @@ jobs:
           os: macos-13
     steps:
     - uses: actions/checkout@v7
-    - uses: actions-rust-lang/setup-rust-toolchain@v1
+    - uses: actions-rust-lang/setup-rust-toolchain@v2
       with:
         target: ${{ matrix.target }}
     - name: Install cargo binstall
@@ -84,7 +84,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7
-    - uses: actions-rust-lang/setup-rust-toolchain@v1
+    - uses: actions-rust-lang/setup-rust-toolchain@v2
     - name: Install cargo binstall
       uses: cargo-bins/cargo-binstall@main
     - name: Install wkg
