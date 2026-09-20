@@ -72,8 +72,5 @@ pub fn create_component(values: Vec<(String, String)>) -> Result<Vec<u8>> {
     let bytes = module.emit_wasm();
 
     // now adapt the virtualized component
-    let mut encoder = ComponentEncoder::default().validate(true).module(&bytes)?;
-    let encoded = encoder.encode()?;
-
-    Ok(encoded)
+    ComponentEncoder::default().validate(true).module(&bytes)?.encode()
 }
