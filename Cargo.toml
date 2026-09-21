@@ -47,4 +47,4 @@ wasmtime = "48"
 anyhow = "1"
 bytes = "1.11"
 static-config = { path = "." }
-wit-bindgen = "0.59"
+wit-bindgen = "0.62"
