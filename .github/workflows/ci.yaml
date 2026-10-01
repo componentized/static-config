@@ -19,6 +19,8 @@ jobs:
       uses: cargo-bins/cargo-binstall@main
     - name: Install wasm-tools
       run: cargo binstall --force wasm-tools
+    - name: Install wkg
+      run: cargo binstall --force wkg
     - name: Build
       run: ./build.sh
     - name: Collect artifacts.tar

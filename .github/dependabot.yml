@@ -12,12 +12,6 @@ updates:
   directory: "/"
   schedule:
     interval: daily
-  groups:
-    wasm-tools:
-      patterns:
-      - wasm-compose
-      - wasm-metadata
-      - wit-component
 - package-ecosystem: devcontainers
   directory: "/"
   schedule:

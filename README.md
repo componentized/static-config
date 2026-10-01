@@ -42,7 +42,7 @@ The Componentized project team welcomes contributions from the community. A cont
 
 This project was conceived in discussion between [Mark Fisher](https://github.com/markfisher) and [Scott Andrews](https://github.com/scothis).
 
-The core of this project is a stripped down fork of [WASI Virt](https://github.com/bytecodealliance/WASI-Virt).
+Components are created with [Constants](https://github.com/componentized/constants), composing a component that returns the configured values with its [`config`](https://github.com/componentized/constants/tree/main/components/config) component, which exports them as `wasi:config/store`.
 
 ## License
 
