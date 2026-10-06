@@ -1,5 +1,5 @@
 *.wasm
 static-config*
 
-# small artifacts that are part of the rust crate should be committed
+# small components that are part of the rust crate should be committed
 !config.wasm
