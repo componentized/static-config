@@ -13,6 +13,10 @@ jobs:
   build-cli:
     name: Build CLI
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        # Git Bash on windows
+        shell: bash
     strategy:
       fail-fast: false
       matrix:
@@ -25,6 +29,12 @@ jobs:
             os: macos-26
           - target: x86_64-apple-darwin
             os: macos-26-intel
+          - target: aarch64-pc-windows-msvc
+            os: windows-11-arm
+            ext: .exe
+          - target: x86_64-pc-windows-msvc
+            os: windows-2025
+            ext: .exe
     steps:
       - uses: actions/checkout@v7
       - uses: actions-rust-lang/setup-rust-toolchain@v2
@@ -35,18 +45,18 @@ jobs:
       - name: Build
         run: |
           cargo build --release --target ${{ matrix.target }}
-          mv target/${{ matrix.target }}/release/static-config lib/static-config-${{ matrix.target }}
+          mv target/${{ matrix.target }}/release/static-config${{ matrix.ext }} lib/static-config-${{ matrix.target }}${{ matrix.ext }}
       - name: Upload CLI
         uses: actions/upload-artifact@v7
         with:
           name: static-config-${{ matrix.target }}
-          path: lib/static-config-${{ matrix.target }}
+          path: lib/static-config-${{ matrix.target }}${{ matrix.ext }}
           retention-days: 7
       - name: Install wasmtime
         run: cargo binstall --force wasmtime-cli
       - name: Smoke test CLI
         run: |
-          echo "name=componentized" | lib/static-config-${{ matrix.target }} -p greeting=hello -f - -o smoke.wasm
+          echo "name=componentized" | lib/static-config-${{ matrix.target }}${{ matrix.ext }} -p greeting=hello -f - -o smoke.wasm
           expect() {
             local actual=$(wasmtime run --invoke "get(\"${1}\")" smoke.wasm)
             if [ "${actual}" != "${2}" ]; then
