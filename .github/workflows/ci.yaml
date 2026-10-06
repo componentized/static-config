@@ -37,7 +37,6 @@ jobs:
 
   build-cli:
     name: Build CLI
-    needs: build
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
