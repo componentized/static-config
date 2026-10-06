@@ -1,0 +1,5 @@
+package componentized:static-config@0.3.0-dev;
+
+world imports {
+    import factory;
+}

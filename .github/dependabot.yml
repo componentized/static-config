@@ -20,6 +20,10 @@ updates:
           - wasmparser
           - wit-component
           - wit-parser
+  - package-ecosystem: cargo
+    directory: "/tools"
+    schedule:
+      interval: daily
   - package-ecosystem: devcontainers
     directory: "/"
     schedule:

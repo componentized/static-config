@@ -17,11 +17,32 @@ A [dev container](https://containers.dev) is available that contains the necessa
 
 Prereqs:
 - a rust toolchain
-- [`wasm-tools`](https://github.com/bytecodealliance/wasm-tools)
-- [`wkg`](https://github.com/bytecodealliance/wasm-pkg-tools)
+- [`cargo-binstall`](https://github.com/cargo-bins/cargo-binstall), optional, to download prebuilt tools instead of building them
+
+The other tools the build uses, e.g. [`wasm-tools`](https://github.com/bytecodealliance/wasm-tools) and [`wkg`](https://github.com/bytecodealliance/wasm-pkg-tools), are installed into `target/tools` by the make targets that need them, at the versions pinned in [`tools/Cargo.toml`](./tools/Cargo.toml). With [`cargo binstall`](https://github.com/cargo-bins/cargo-binstall) they're downloaded rather than built.
 
 ```sh
-./build.sh
+make components
+```
+
+The build creates each component in [`components`](./components) into `target/components`, e.g. the factory at `target/components/factory/factory.wasm`, along with `target/components/interface.wasm`, the `componentized:static-config` WIT package. Each component is also built with debug info, e.g. `target/components/factory/factory.debug.wasm`.
+
+To run the tests, which exercise the library and the components:
+
+```sh
+make test
+```
+
+The library embeds the [`config`](https://github.com/componentized/constants/tree/main/components/config) component from Constants, which serves the values of every component it creates, so the CLI and the factory component include it too. It's pulled by the [`dep-constants-config`](./components/dep-constants-config) component, and committed at `crates/componentized-static-config/constants-config.wasm` so the crates build with `cargo` alone. Its version must match the `componentized-constants` crate in `Cargo.lock`. After bumping that crate, update the image in [`dep-constants-config.wkg`](./components/dep-constants-config/dep-constants-config.wkg) to match, and copy it into the library with:
+
+```sh
+make config
+```
+
+The WIT dependencies in each `wit/deps` directory are fetched rather than committed, pinned by the `wkg.lock` files. The make targets fetch them as needed. To fetch or update them directly, e.g. before building the Rust components with `cargo`, whose bindings are generated from the WIT:
+
+```sh
+make wit
 ```
 
 ## Community

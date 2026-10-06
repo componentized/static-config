@@ -10,96 +10,145 @@ on:
   pull_request: {}
 
 jobs:
-  build-cli:
-    name: Build CLI
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        # Git Bash on windows
-        shell: bash
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - target: aarch64-unknown-linux-musl
-            os: ubuntu-26.04-arm
-          - target: x86_64-unknown-linux-musl
-            os: ubuntu-26.04
-          - target: aarch64-apple-darwin
-            os: macos-26
-          - target: x86_64-apple-darwin
-            os: macos-26-intel
-          - target: aarch64-pc-windows-msvc
-            os: windows-11-arm
-            ext: .exe
-          - target: x86_64-pc-windows-msvc
-            os: windows-2025
-            ext: .exe
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions-rust-lang/setup-rust-toolchain@v2
-        with:
-          target: ${{ matrix.target }}
-      - name: Install cargo binstall
-        uses: cargo-bins/cargo-binstall@main
-      - name: Build
-        run: |
-          cargo build --release --target ${{ matrix.target }}
-          mv target/${{ matrix.target }}/release/static-config${{ matrix.ext }} lib/static-config-${{ matrix.target }}${{ matrix.ext }}
-      - name: Upload CLI
-        uses: actions/upload-artifact@v7
-        with:
-          name: static-config-${{ matrix.target }}
-          path: lib/static-config-${{ matrix.target }}${{ matrix.ext }}
-          retention-days: 7
-      - name: Install wasmtime
-        run: cargo binstall --force wasmtime-cli
-      - name: Smoke test CLI
-        run: |
-          echo "name=componentized" | lib/static-config-${{ matrix.target }}${{ matrix.ext }} -p greeting=hello -f - -o smoke.wasm
-          expect() {
-            local actual=$(wasmtime run --invoke "get(\"${1}\")" smoke.wasm)
-            if [ "${actual}" != "${2}" ]; then
-              echo "get(\"${1}\") expected: ${2}"
-              echo "get(\"${1}\") actual:   ${actual}"
-              exit 1
-            fi
-          }
-          expect greeting 'ok(some("hello"))'
-          expect name 'ok(some("componentized"))'
-          expect missing 'ok(none)'
-
-  build-components:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - uses: actions-rust-lang/setup-rust-toolchain@v2
       - name: Install cargo binstall
         uses: cargo-bins/cargo-binstall@main
-      - name: Install wasm-tools
-        run: cargo binstall --force wasm-tools
-      - name: Install wkg
-        run: cargo binstall --force wkg
-      - name: Build
-        run: ./build.sh
+      - name: Install tools
+        run: |
+          make tools
+          echo "${PWD}/target/tools/bin" >> "${GITHUB_PATH}"
+      - name: Sync wit and the config component
+        run: make wit config
+      - name: Check for drift in generated wit and the config component
+        # constants-config.wasm is committed with the library crate, pulled by components/dep-constants-config, which must
+        # match the version of the componentized-constants crate in Cargo.lock
+        run: git diff --exit-code .
+      - name: Check crate version matches the interface version
+        # the crates inherit the workspace version, bumped with the interface by
+        # scripts/bump-version.sh
+        run: |
+          interface_version=$( sed -n "s/^package ${GITHUB_REPOSITORY/\//:}@\(.*\);$/\1/p" wit/worlds.wit )
+          workspace_version=$( sed -n '/^\[workspace.package\]/,/^\[/s/^version = "\(.*\)"$/\1/p' Cargo.toml )
+          if [ "${workspace_version}" != "${interface_version}" ] ; then
+            echo "::error::the workspace version ${workspace_version} in Cargo.toml does not match the interface version ${interface_version}, see scripts/bump-version.sh"
+            exit 1
+          fi
+      - name: Check crates can be published
+        # the release workflow publishes the crates when a release is published, too late to find a
+        # crate can't be published. The cli is verified against the library being published with it.
+        run: cargo publish --dry-run --locked -p componentized-static-config -p componentized-static-config-cli
+      - name: Build components
+        run: make components
       - name: Collect components.tar
-        run: tar -cvf ../components.tar *
-        working-directory: ./lib
+        run: tar -cvf ../../components.tar .
+        working-directory: ./target/components
       - name: Upload components.tar
         uses: actions/upload-artifact@v7
         with:
           name: components.tar
           path: components.tar
           retention-days: 7
-      - name: Disallow generated drift
-        run: git diff --exit-code .
+      - name: Test
+        run: make test
+      - name: Capture WIT
+        working-directory: ./target/components
+        run: |
+          dump_wit() {
+            echo "::group::$(basename "$1") ($(du -h "$1" | awk '{print $1}' ))"
+              wasm-tools component wit "$1"
+            echo "::endgroup::"
+          }
+
+          # print interface.wasm first
+          if [ -f interface.wasm ] ; then
+            dump_wit interface.wasm
+          fi
+          for component in $(find . -name '*.wasm' -not -name '*.debug.wasm' -not -name 'interface.wasm' | sort) ; do
+            dump_wit "${component}"
+          done
+
+  cli:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-26.04
+            target: x86_64-unknown-linux-musl
+          - os: ubuntu-26.04-arm
+            target: aarch64-unknown-linux-musl
+          - os: macos-26
+            target: aarch64-apple-darwin
+          - os: macos-26-intel
+            target: x86_64-apple-darwin
+          - os: windows-2025
+            target: x86_64-pc-windows-msvc
+          - os: windows-11-arm
+            target: aarch64-pc-windows-msvc
+    # each runner builds for its own platform, linux builds are static with musl
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions-rust-lang/setup-rust-toolchain@v2
+        with:
+          target: ${{ matrix.target }}
+      - name: Build cli
+        run: cargo build --release --locked --bin static-config --target ${{ matrix.target }}
+      - name: Package cli
+        if: runner.os != 'Windows'
+        run: |
+          mkdir -p dist
+          tar -czvf "dist/static-config-${{ matrix.target }}.tar.gz" -C target/${{ matrix.target }}/release static-config -C "${PWD}" LICENSE NOTICE README.md
+      - name: Package cli
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist
+          Compress-Archive -Path target/${{ matrix.target }}/release/static-config.exe, LICENSE, NOTICE, README.md -DestinationPath "dist/static-config-${{ matrix.target }}.zip"
+      # the smoke test runs the cli from the package, as a user would
+      - name: Unpack cli
+        if: runner.os != 'Windows'
+        run: |
+          mkdir -p smoke
+          tar -xzvf "dist/static-config-${{ matrix.target }}.tar.gz" -C smoke
+      - name: Unpack cli
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: Expand-Archive -Path "dist/static-config-${{ matrix.target }}.zip" -DestinationPath smoke
+      - name: Install wasmtime
+        uses: bytecodealliance/actions/wasmtime/setup@v1
+      - name: Smoke test cli
+        shell: bash
+        run: |
+          echo "name=componentized" | ./smoke/static-config -p greeting=hello -f - -o smoke/smoke.wasm
+          expect() {
+            local actual=$(wasmtime run --invoke "get(\"${1}\")" smoke/smoke.wasm | tr -d '\r')
+            echo "get(\"${1}\") = ${actual}"
+            if [ "${actual}" != "${2}" ] ; then
+              echo "::error::expected get(\"${1}\") to return ${2}, got '${actual}'"
+              exit 1
+            fi
+          }
+          expect greeting 'ok(some("hello"))'
+          expect name 'ok(some("componentized"))'
+          expect missing 'ok(none)'
+      - name: Upload cli
+        uses: actions/upload-artifact@v7
+        with:
+          name: cli-${{ matrix.target }}
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 7
 
   # synthetic job used to gate merging PRs
   test:
     runs-on: ubuntu-latest
     needs:
-      - build-cli
-      - build-components
+      - build
+      - cli
     steps:
       - name: Nothing to do
         run: true
@@ -111,46 +160,83 @@ jobs:
     permissions:
       contents: write
       packages: write
+      id-token: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - uses: actions-rust-lang/setup-rust-toolchain@v2
       - name: Install cargo binstall
         uses: cargo-bins/cargo-binstall@main
-      - name: Install wkg
-        run: cargo binstall --force wkg
+      - name: Install tools
+        run: |
+          make tools
+          echo "${PWD}/target/tools/bin" >> "${GITHUB_PATH}"
       - name: Install cosign
         uses: sigstore/cosign-installer@v4.1.2
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       - name: Download components.tar
         uses: actions/download-artifact@v8
         with:
           name: components.tar
       - name: Extract components
-        run: tar -xvf components.tar -C lib
-      - name: Download CLIs
+        run: mkdir -p target/components && tar -xvf components.tar -C target/components
+      - name: Download cli
         uses: actions/download-artifact@v8
         with:
-          pattern: static-config-*
-          path: ./lib/
+          pattern: cli-*
+          path: dist
           merge-multiple: true
+      - name: Get interface version
+        id: interface_version
+        run: echo "VERSION=$( wasm-tools component wit target/components/interface.wasm --json | jq -r "[.packages[] | select(.name | contains(\"${GITHUB_REPOSITORY/\//:}@\"))][0].name" | cut -d'@' -f2 )" >> $GITHUB_OUTPUT
+      - name: Get tag version
+        if: startsWith(github.ref, 'refs/tags/')
+        id: tag_version
+        run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
+      - name: Check tag matches the workspace version
+        # cargo binstall finds the cli archives at the release tagged with the cli crate's version,
+        # and publishing the release publishes both crates to crates.io at that version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          workspace_version=$( sed -n '/^\[workspace.package\]/,/^\[/s/^version = "\(.*\)"$/\1/p' Cargo.toml )
+          if [ "v${workspace_version}" != "${{ steps.tag_version.outputs.VERSION }}" ] ; then
+            echo "::error::tag ${{ steps.tag_version.outputs.VERSION }} does not match the workspace version ${workspace_version} in Cargo.toml"
+            exit 1
+          fi
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Publish factory to gchr.io
-        run: ./publish.sh "ghcr.io/${{ github.repository }}" "${{ steps.get_version.outputs.VERSION }}"
+      - name: Publish components to gchr.io
+        # only publish tags and pre-releases from main
+        if: startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/main' && contains(steps.interface_version.outputs.VERSION, '-'))
+        run: make publish
+        env:
+          PUBLISH_LOG: "${{ runner.temp }}/published.txt"
+          REPOSITORY: "ghcr.io/${{ github.repository }}"
+          VERSION: "${{ case(github.ref == 'refs/heads/main', steps.interface_version.outputs.VERSION, steps.tag_version.outputs.VERSION) }}"
+      - name: Draft release notes
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          {
+            echo "## Published components"
+            echo
+            echo "| File | Image |"
+            echo "| --- | --- |"
+            while read -r file image ; do
+              echo "| \`${file}\` | \`${image}\` |"
+            done < "${RUNNER_TEMP}/published.txt"
+          } > "${RUNNER_TEMP}/release-notes.md"
+          cat "${RUNNER_TEMP}/release-notes.md"
       - name: Draft GitHub Release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v3
         with:
           draft: true
+          body_path: ${{ runner.temp }}/release-notes.md
           files: |
-            lib/factory.wasm
-            lib/static-config-*
+            components.tar
+            dist/*
           fail_on_unmatched_files: true
           token: ${{ secrets.GITHUB_TOKEN }}

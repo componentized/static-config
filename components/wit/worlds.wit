@@ -1,0 +1,9 @@
+package componentized:static-config-components;
+
+world adapter {
+    export wasi:config/store@0.2.0-rc.1;
+}
+
+world factory {
+    export componentized:static-config/factory@0.3.0-dev;
+}

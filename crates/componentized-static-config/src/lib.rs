@@ -10,7 +10,7 @@ use wit_component::DecodedWasm;
 use wit_parser::{Resolve, WorldId, WorldItem};
 
 /// Exports `wasi:config/store`, serving the values it imports from `config-values`.
-const CONFIG: &[u8] = include_bytes!("../lib/config.wasm");
+const CONFIG: &[u8] = include_bytes!("../constants-config.wasm");
 
 pub fn create_component(values: Vec<(String, String)>) -> Result<Vec<u8>> {
     // later values replace earlier values with the same key, served sorted by key

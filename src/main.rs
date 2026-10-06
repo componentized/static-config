@@ -1,6 +1,6 @@
 use anyhow::{Error, Result};
 use clap::Parser;
-use static_config::create_component;
+use componentized_static_config::create_component;
 use std::{
     fs::File,
     io::{self, Read, Write},

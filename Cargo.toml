@@ -1,57 +1,72 @@
 [package]
-name = "static-config"
-version = "0.2.0"
+name = "componentized-static-config-cli"
+version.workspace = true
 edition = "2021"
 
 license = "Apache-2.0"
 repository = "https://github.com/componentized/static-config"
-description = "Create custom wasi:config components with static values"
-default-run = "static-config"
+description = "Create custom wasi:config components with static values, from the command line"
 include = [
-    "/lib/config.wasm",
     "/src",
-    "README.md",
-    "NOTICE",
-    "LICENSE"
+    "/README.md",
+    "/NOTICE",
+    "/LICENSE"
 ]
+
+[[bin]]
+name = "static-config"
+path = "src/main.rs"
+doc = false
+
+[package.metadata.binstall]
+pkg-url = "{ repo }/releases/download/v{ version }/static-config-{ target }{ archive-suffix }"
+bin-dir = "{ bin }{ binary-ext }"
+pkg-fmt = "tgz"
+
+[package.metadata.binstall.overrides.'cfg(windows)']
+pkg-fmt = "zip"
+
+[workspace]
+members = [
+    "components/factory",
+    "crates/componentized-static-config",
+    "crates/test-harness",
+]
+
+# the version of the cli and library crates, kept in step with the interface package by
+# scripts/bump-version.sh
+[workspace.package]
+version = "0.3.0-dev"
+
+[workspace.dependencies]
+anyhow = "1"
+# published with the cli, the cli requires the library at exactly the same version, kept in step by
+# scripts/bump-version.sh
+componentized-static-config = { path = "./crates/componentized-static-config", version = "=0.3.0-dev" }
+test-harness = { path = "./crates/test-harness" }
+wasmtime = "48"
+wit-bindgen = "0.62"
+
+[dependencies]
+anyhow = { workspace = true }
+clap = { version = "4.6", features = ["derive"] }
+componentized-static-config = { workspace = true }
+java-properties = "2.0"
 
 [profile.release]
 panic = 'abort'
 
-# release builds of the factory component, optimized for size rather than speed as it is published
-# and downloaded. The cli is built with the release profile.
+# compiling the factory component in tests is slow with an unoptimized
+# wasmtime. Dependencies are optimized by wildcard, as specs naming wasmtime's
+# crates warn when dev-dependencies aren't resolved, e.g. `cargo install`.
+[profile.dev.package."*"]
+opt-level = 1
+
+# release builds of the wasm components, optimized for size rather than speed as
+# they are published and downloaded. The cli is built with the release profile.
 [profile.component]
 inherits = "release"
 opt-level = "z"
 lto = true
 codegen-units = 1
 strip = true
-
-[[bin]]
-name = "static-config"
-path = "src/bin/main.rs"
-doc = false
-
-[workspace]
-members = [
-    "factory",
-]
-
-[dependencies]
-anyhow = { workspace = true }
-clap = { version = "4.6", features = ["derive"] }
-componentized-constants = "0.1.1"
-java-properties = "2.0"
-wasm-encoder = "0.261.0"
-wasm-metadata = "0.261.0"
-wasmparser = "0.261.0"
-wit-component = "0.261.0"
-wit-parser = "0.261.0"
-
-[dev-dependencies]
-wasmtime = "48"
-
-[workspace.dependencies]
-anyhow = "1"
-static-config = { path = "." }
-wit-bindgen = "0.62"
