@@ -99,3 +99,43 @@ fn it_creates_a_component_with_multiple_values() {
         "config value does not match"
     );
 }
+
+#[test]
+fn it_creates_a_component_with_the_last_value_for_a_key_sorted_by_key() {
+    let component = create_component(vec![
+        (String::from("name"), String::from("first")),
+        (String::from("greeting"), String::from("hello")),
+        (String::from("name"), String::from("componentized")),
+    ])
+    .expect("create_component should not error");
+    assert_eq!(
+        vec![
+            (String::from("greeting"), String::from("hello")),
+            (String::from("name"), String::from("componentized")),
+        ],
+        get_all(&component).expect("get_config_values should not error"),
+        "config values do not match"
+    );
+    assert_eq!(
+        Some(String::from("componentized")),
+        get(&component, "name").expect("get_config_value should not error"),
+        "config value does not match"
+    );
+}
+
+#[test]
+fn it_creates_a_component_with_special_characters() {
+    let expected = vec![
+        (String::from(""), String::from("")),
+        (
+            String::from("quoted \"key\""),
+            String::from("line one\nline two\t\\ // not a comment 🎉"),
+        ),
+    ];
+    let component = create_component(expected.clone()).expect("create_component should not error");
+    assert_eq!(
+        expected,
+        get_all(&component).expect("get_config_values should not error"),
+        "config values do not match"
+    );
+}

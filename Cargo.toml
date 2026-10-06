@@ -8,8 +8,7 @@ repository = "https://github.com/componentized/static-config"
 description = "Create custom wasi:config components with static values"
 default-run = "static-config"
 include = [
-    "/lib/adapter.wasm",
-    "/lib/package.wasm",
+    "/lib/config.wasm",
     "/src",
     "README.md",
     "NOTICE",
@@ -19,6 +18,15 @@ include = [
 [profile.release]
 panic = 'abort'
 
+# release builds of the factory component, optimized for size rather than speed as it is published
+# and downloaded. The cli is built with the release profile.
+[profile.component]
+inherits = "release"
+opt-level = "z"
+lto = true
+codegen-units = 1
+strip = true
+
 [[bin]]
 name = "static-config"
 path = "src/bin/main.rs"
@@ -26,25 +34,24 @@ doc = false
 
 [workspace]
 members = [
-    "adapter",
     "factory",
 ]
 
 [dependencies]
 anyhow = { workspace = true }
 clap = { version = "4.6", features = ["derive"] }
+componentized-constants = "0.1.0-dev"
 java-properties = "2.0"
-serde = { version = "1.0", features = ["derive"] }
-walrus = "0.26"
-wasm-compose = "0.259.0"
+wasm-encoder = "0.259.0"
 wasm-metadata = "0.259.0"
+wasmparser = "0.259.0"
 wit-component = "0.259.0"
+wit-parser = "0.259.0"
 
 [dev-dependencies]
 wasmtime = "48"
 
 [workspace.dependencies]
 anyhow = "1"
-bytes = "1.11"
 static-config = { path = "." }
 wit-bindgen = "0.62"

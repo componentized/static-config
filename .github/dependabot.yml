@@ -1,24 +1,26 @@
 version: 2
 updates:
-- package-ecosystem: github-actions
-  directory: "/"
-  schedule:
-    interval: daily
-- package-ecosystem: rust-toolchain
-  directory: "/"
-  schedule:
-    interval: daily
-- package-ecosystem: cargo
-  directory: "/"
-  schedule:
-    interval: daily
-  groups:
-    wasm-tools:
-      patterns:
-      - wasm-compose
-      - wasm-metadata
-      - wit-component
-- package-ecosystem: devcontainers
-  directory: "/"
-  schedule:
-    interval: weekly
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: daily
+  - package-ecosystem: rust-toolchain
+    directory: "/"
+    schedule:
+      interval: daily
+  - package-ecosystem: cargo
+    directory: "/"
+    schedule:
+      interval: daily
+    groups:
+      wasm-tools:
+        patterns:
+          - wasm-encoder
+          - wasm-metadata
+          - wasmparser
+          - wit-component
+          - wit-parser
+  - package-ecosystem: devcontainers
+    directory: "/"
+    schedule:
+      interval: weekly
