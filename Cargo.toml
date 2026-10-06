@@ -44,7 +44,7 @@ anyhow = "1"
 # scripts/bump-version.sh
 componentized-static-config = { path = "./crates/componentized-static-config", version = "=0.3.0-dev" }
 test-harness = { path = "./crates/test-harness" }
-wasmtime = "48"
+wasmtime = "49"
 wit-bindgen = "0.62"
 
 [dependencies]
