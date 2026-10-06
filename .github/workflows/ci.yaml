@@ -10,31 +10,6 @@ on:
   pull_request: {}
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions-rust-lang/setup-rust-toolchain@v2
-      - name: Install cargo binstall
-        uses: cargo-bins/cargo-binstall@main
-      - name: Install wasm-tools
-        run: cargo binstall --force wasm-tools
-      - name: Install wkg
-        run: cargo binstall --force wkg
-      - name: Build
-        run: ./build.sh
-      - name: Collect artifacts.tar
-        run: tar -cvf ../artifacts.tar *
-        working-directory: ./lib
-      - name: Upload artifacts.tar
-        uses: actions/upload-artifact@v7
-        with:
-          name: artifacts.tar
-          path: artifacts.tar
-          retention-days: 7
-      - name: Disallow generated drift
-        run: git diff --exit-code .
-
   build-cli:
     name: Build CLI
     runs-on: ${{ matrix.os }}
@@ -57,12 +32,6 @@ jobs:
           target: ${{ matrix.target }}
       - name: Install cargo binstall
         uses: cargo-bins/cargo-binstall@main
-      - name: Download artifacts.tar
-        uses: actions/download-artifact@v8
-        with:
-          name: artifacts.tar
-      - name: Extract artifacts
-        run: tar -xvf artifacts.tar -C lib
       - name: Build
         run: |
           cargo build --release --target ${{ matrix.target }}
@@ -90,12 +59,37 @@ jobs:
           expect name 'ok(some("componentized"))'
           expect missing 'ok(none)'
 
+  build-components:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions-rust-lang/setup-rust-toolchain@v2
+      - name: Install cargo binstall
+        uses: cargo-bins/cargo-binstall@main
+      - name: Install wasm-tools
+        run: cargo binstall --force wasm-tools
+      - name: Install wkg
+        run: cargo binstall --force wkg
+      - name: Build
+        run: ./build.sh
+      - name: Collect components.tar
+        run: tar -cvf ../components.tar *
+        working-directory: ./lib
+      - name: Upload components.tar
+        uses: actions/upload-artifact@v7
+        with:
+          name: components.tar
+          path: components.tar
+          retention-days: 7
+      - name: Disallow generated drift
+        run: git diff --exit-code .
+
   # synthetic job used to gate merging PRs
   test:
     runs-on: ubuntu-latest
     needs:
-      - build
       - build-cli
+      - build-components
     steps:
       - name: Nothing to do
         run: true
@@ -120,12 +114,12 @@ jobs:
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-      - name: Download artifacts.tar
+      - name: Download components.tar
         uses: actions/download-artifact@v8
         with:
-          name: artifacts.tar
-      - name: Extract artifacts
-        run: tar -xvf artifacts.tar -C lib
+          name: components.tar
+      - name: Extract components
+        run: tar -xvf components.tar -C lib
       - name: Download CLIs
         uses: actions/download-artifact@v8
         with:
