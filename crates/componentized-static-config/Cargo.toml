@@ -1,0 +1,29 @@
+[package]
+name = "componentized-static-config"
+version.workspace = true
+edition = "2021"
+
+license = "Apache-2.0"
+repository = "https://github.com/componentized/static-config"
+description = "Create custom wasi:config components with static values"
+readme = "../../README.md"
+# LICENSE and NOTICE link to the files at the root of the repository. constants-config.wasm is fetched by
+# `make config`, and committed so the crate builds without make.
+include = [
+    "/constants-config.wasm",
+    "/src",
+    "/LICENSE",
+    "/NOTICE",
+]
+
+[dependencies]
+anyhow = { workspace = true }
+componentized-constants = "0.1.1"
+wasm-encoder = "0.261.0"
+wasm-metadata = "0.261.0"
+wasmparser = "0.261.0"
+wit-component = "0.261.0"
+wit-parser = "0.261.0"
+
+[dev-dependencies]
+wasmtime = { workspace = true }

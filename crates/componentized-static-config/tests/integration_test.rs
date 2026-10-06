@@ -1,5 +1,5 @@
 use anyhow::{Error, Result};
-use static_config::create_component;
+use componentized_static_config::create_component;
 use wasmtime::{
     component::{Component, Linker, ResourceTable},
     Engine, Store,
@@ -7,7 +7,7 @@ use wasmtime::{
 
 wasmtime::component::bindgen!({
     world: "adapter",
-    path: "wit",
+    path: "../../components/wit",
 });
 
 fn get_all(bytes: &[u8]) -> Result<Vec<(String, String)>> {

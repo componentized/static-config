@@ -1,7 +1,7 @@
-#![no_main]
+#![cfg_attr(not(test), no_main)]
 
-use crate::exports::componentized::config::factory::{Error, Guest};
-use static_config::create_component;
+use crate::exports::componentized::static_config::factory::{Error, Guest};
+use componentized_static_config::create_component;
 
 pub(crate) struct Factory;
 
@@ -14,7 +14,7 @@ impl Guest for Factory {
 
 wit_bindgen::generate!({
     path: "../wit",
-    world: "config-factory",
+    world: "factory",
     generate_all
 });
 

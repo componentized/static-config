@@ -1,5 +1,0 @@
-*.wasm
-static-config*
-
-# small components that are part of the rust crate should be committed
-!config.wasm

@@ -1,5 +1,8 @@
+@since(version = 0.2.0)
 interface factory {
+    @since(version = 0.2.0)
     type error = string;
 
+    @since(version = 0.2.0)
     build-component: func(values: list<tuple<string, string>>) -> result<list<u8>, error>;
 }
