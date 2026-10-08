@@ -62,7 +62,7 @@ fn build_component(engine: &Engine, values: &[(&str, &str)]) -> Result<Vec<u8>> 
         &mut store,
         &instance,
         FACTORY_INTERFACE,
-        "build-component",
+        "create",
         &[values],
     )? {
         Val::Result(Ok(Some(bytes))) => match *bytes {

@@ -38,7 +38,7 @@ CONFIG_ADAPTER_WASM := crates/componentized-static-config/constants-config.wasm
 
 
 .PHONY: all
-all: build components
+all: build components test
 
 .PHONY: build
 build: config
@@ -49,12 +49,20 @@ install: config
 	cargo +$(RUST_TOOLCHAIN) install --path . --locked
 
 .PHONY: clean
-clean: clean-wit
+clean: clean-components clean-wit 
+	@:
+
+.PHONY: clean-all
+clean-all: clean-components clean-tools clean-wit 
 	cargo clean
 
 .PHONY: clean-components
 clean-components: clean-wit
 	rm -rf ${COMPONENTS_DIR}
+
+.PHONY: clean-tools
+clean-tools:
+	rm -rf ${TOOLS_DIR}
 
 .PHONY: clean-wit ## Remove the fetched wit dependencies, fetched again by `make wit`
 clean-wit:
