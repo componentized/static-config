@@ -1,6 +1,6 @@
 # Static config components <!-- omit in toc -->
 
-Create custom wasi:config components with static values.
+Create custom `wasi:config` components with static values.
 
 - [Build](#build)
 - [Community](#community)
