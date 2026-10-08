@@ -5,5 +5,5 @@ world adapter {
 }
 
 world factory {
-    export componentized:static-config/factory@0.3.0-dev;
+    export componentized:static-config/factory@0.3.0;
 }
