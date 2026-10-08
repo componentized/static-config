@@ -236,7 +236,7 @@ dependencies = [
 
 [[package]]
 name = "componentized-static-config"
-version = "0.3.0"
+version = "0.3.1-dev"
 dependencies = [
  "anyhow",
  "componentized-constants",
@@ -250,7 +250,7 @@ dependencies = [
 
 [[package]]
 name = "componentized-static-config-cli"
-version = "0.3.0"
+version = "0.3.1-dev"
 dependencies = [
  "anyhow",
  "clap",
@@ -562,7 +562,7 @@ dependencies = [
 
 [[package]]
 name = "factory"
-version = "0.3.0"
+version = "0.3.1-dev"
 dependencies = [
  "anyhow",
  "componentized-static-config",

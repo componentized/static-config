@@ -36,13 +36,13 @@ members = [
 # the version of the cli and library crates, kept in step with the interface package by
 # scripts/bump-version.sh
 [workspace.package]
-version = "0.3.0"
+version = "0.3.1-dev"
 
 [workspace.dependencies]
 anyhow = "1"
 # published with the cli, the cli requires the library at exactly the same version, kept in step by
 # scripts/bump-version.sh
-componentized-static-config = { path = "./crates/componentized-static-config", version = "=0.3.0" }
+componentized-static-config = { path = "./crates/componentized-static-config", version = "=0.3.1-dev" }
 test-harness = { path = "./crates/test-harness" }
 wasmtime = "49"
 wit-bindgen = "0.62"
