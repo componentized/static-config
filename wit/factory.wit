@@ -1,8 +1,7 @@
 @since(version = 0.2.0)
 interface factory {
-    @since(version = 0.2.0)
-    type error = string;
+    use componentized:component/types@0.1.0.{wasm, error-code};
 
     @since(version = 0.2.0)
-    build-component: func(values: list<tuple<string, string>>) -> result<list<u8>, error>;
+    build-component: func(values: list<tuple<string, string>>) -> result<wasm, error-code>;
 }
