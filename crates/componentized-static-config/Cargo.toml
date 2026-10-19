@@ -18,7 +18,7 @@ include = [
 
 [dependencies]
 anyhow = { workspace = true }
-componentized-constants = "0.1.1"
+componentized-constants = "0.2.0"
 wasm-encoder = "0.262.0"
 wasm-metadata = "0.262.0"
 wasmparser = "0.262.0"
