@@ -19,7 +19,7 @@ Prereqs:
 - a rust toolchain
 - [`cargo-binstall`](https://github.com/cargo-bins/cargo-binstall), optional, to download prebuilt tools instead of building them
 
-The other tools the build uses, e.g. [`wasm-tools`](https://github.com/bytecodealliance/wasm-tools) and [`wkg`](https://github.com/bytecodealliance/wasm-pkg-tools), are installed into `target/tools` by the make targets that need them, at the versions pinned in [`tools/Cargo.toml`](./tools/Cargo.toml). With [`cargo binstall`](https://github.com/cargo-bins/cargo-binstall) they're downloaded rather than built.
+The other tools the build uses, e.g. [`wasm-tools`](https://github.com/bytecodealliance/wasm-tools) and [`wkg`](https://github.com/bytecodealliance/wasm-pkg-tools), are installed into `target/tools/<host>` by the make targets that need them, at the versions pinned in [`tools/Cargo.toml`](./tools/Cargo.toml). With [`cargo binstall`](https://github.com/cargo-bins/cargo-binstall) they're downloaded rather than built.
 
 ```sh
 make components
