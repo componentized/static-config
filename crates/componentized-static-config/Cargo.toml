@@ -19,11 +19,11 @@ include = [
 [dependencies]
 anyhow = { workspace = true }
 componentized-constants = "0.1.1"
-wasm-encoder = "0.261.0"
-wasm-metadata = "0.261.0"
-wasmparser = "0.261.0"
-wit-component = "0.261.0"
-wit-parser = "0.261.0"
+wasm-encoder = "0.262.0"
+wasm-metadata = "0.262.0"
+wasmparser = "0.262.0"
+wit-component = "0.262.0"
+wit-parser = "0.262.0"
 
 [dev-dependencies]
 wasmtime = { workspace = true }
