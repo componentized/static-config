@@ -240,12 +240,12 @@ version = "0.3.1-dev"
 dependencies = [
  "anyhow",
  "componentized-constants",
- "wasm-encoder 0.262.0",
- "wasm-metadata 0.262.0",
- "wasmparser 0.262.0",
+ "wasm-encoder 0.263.0",
+ "wasm-metadata 0.263.0",
+ "wasmparser 0.263.0",
  "wasmtime",
- "wit-component 0.262.0",
- "wit-parser 0.262.0",
+ "wit-component 0.263.0",
+ "wit-parser 0.263.0",
 ]
 
 [[package]]
@@ -1725,7 +1725,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8997a297f42413bee775d73a750def062ee1ec4a6d904703cb08046c0296774d"
 dependencies = [
  "anyhow",
+ "auditable-serde",
+ "flate2",
  "indexmap",
+ "serde",
+ "serde_derive",
+ "serde_json",
+ "spdx",
+ "url",
  "wasm-encoder 0.263.0",
  "wasmparser 0.263.0",
 ]
@@ -1750,7 +1757,6 @@ dependencies = [
  "hashbrown 0.17.1",
  "indexmap",
  "semver",
- "serde",
 ]
 
 [[package]]
