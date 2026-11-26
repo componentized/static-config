@@ -1,4 +1,4 @@
-package componentized:static-config@0.3.1;
+package componentized:static-config@0.3.2-dev;
 
 world imports {
     import factory;
