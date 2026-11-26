@@ -7,6 +7,6 @@ name = "componentized:component"
 registry = "componentized.dev"
 
 [[packages.versions]]
-requirement = "=0.1.1"
-version = "0.1.1"
-digest = "sha256:834ab2662bcbdfda846251feca738783489823ace416c9993a7c09a9bd11a39d"
+requirement = "=0.1.2"
+version = "0.1.2"
+digest = "sha256:8fe815da1e59708893bec7367b16b036e7eaa6c7f25dd305f3199574551c231e"
